@@ -48,30 +48,30 @@ Search `[ v3_ca ] ` and add following line
 
     ```
         input {
-        lumberjack {
-        port => 5000
-        type => "logs"
-        ssl_certificate => "/etc/pki/tls/certs/logstash-forwarder.crt"
-        ssl_key => "/etc/pki/tls/private/logstash-forwarder.key"
-        }
-        }
+            lumberjack {
+                port => 5000
+                type => "logs"
+                ssl_certificate => "/etc/pki/tls/certs/logstash-forwarder.crt"
+                ssl_key => "/etc/pki/tls/private/logstash-forwarder.key"
+                     }
+                }
     ```
 
 * `sudo vi /etc/logstash/conf.d/10-syslog.conf`
 
     ```
         filter {
-        if [type] == "syslog" {
-        grok {
-        match => { "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp}" }
-        add_field => [ "received_at", "%{@timestamp}" ]
-        add_field => [ "received_from", "%{host}" ]
-        }
-        syslog_pri { }
-        date {
-        match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
-        }
-        }
+            if [type] == "syslog" {
+              grok {
+                    match => { "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp}" }
+                    add_field => [ "received_at", "%{@timestamp}" ]
+                    add_field => [ "received_from", "%{host}" ]
+                    }
+             syslog_pri { }
+                 date {
+                       match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
+                     }
+              }
         }
     ```
 * `sudo vi /etc/logstash/conf.d/30-lumberjack-output.conf`
@@ -79,12 +79,12 @@ Search `[ v3_ca ] ` and add following line
     ```
         output
         {
-        stdout {
-        codec => rubydebug
+            stdout {
+            codec => rubydebug
         }
-        elasticsearch {
-        cluster => "elk-stack"
-        }
+            elasticsearch {
+             cluster => "elk-stack"
+                 }
         }
     ```
 
@@ -184,21 +184,21 @@ Search `[ v3_ca ] ` and add following line
 * `sudo rm -rf /etc/logstash-forwarder.conf && `
     ```
         {
-                  "network": {
-                         "servers": [ "LOGSTASHIP:5000" ],
-                         "timeout": 15,
-                         "ssl ca": "/etc/pki/tls/certs/logstash-forwarder.crt"
+        "network": {
+                    "servers": [ "LOGSTASHIP:5000" ],
+                    "timeout": 15,
+                    "ssl ca": "/etc/pki/tls/certs/logstash-forwarder.crt"
              },
 
                   "files": [
                          {
-                                "paths": [
-                                         "/var/log/apache2/access.log",
-                                         "/var/log/apache2/error.log"
-                                        ],
+                        "paths": [
+                                "/var/log/apache2/access.log",
+                                "/var/log/apache2/error.log"
+                                ],
                      "fields": { "type": "syslog" }
                         }
-                        ]
+                    ]
                 }
 
     ```

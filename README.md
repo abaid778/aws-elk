@@ -115,4 +115,62 @@ Search `[ v3_ca ] ` and add following line
 *   `sudo service logstash restart`
 *   `sudo service elasticsearch start`
 
+### Kinbana Installation and configuration
 
+* 	`sudo su` --- become root
+*   `sudo add-apt-repository -y ppa:webupd8team/java` --- add Java PPA
+* 	`sudo apt-get update && sudo apt-get -y install oracle-java8-installer`
+* 	`wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -`
+* 	`cd /root && wget https://download.elasticsearch.org/kibana/kibana/kibana-4.0.1-linux-x64.tar.gz`
+* 	`tar xvf kibana-*.tar.gz`
+* 	`sudo mkdir -p /opt/kibana`
+* 	`sudo cp -R ~/kibana-4*/* /opt/kibana/`
+* 	`cd /etc/init.d && sudo wget https://gist.githubusercontent.com/thisismitch/8b15ac909aed214ad04a/raw/bce61d85643c2dcdfbc2728c55a41dab444dca20/kibana4`
+*   `sudo chmod +x /etc/init.d/kibana4`
+*   `sudo update-rc.d kibana4 defaults 96 9`
+*   `sudo service kibana4 start`
+*   `sudo apt-get install nginx apache2-utils`
+*   `sudo htpasswd -c /etc/nginx/htpasswd.users kibanaadmin`
+*   `sudo vi /etc/nginx/sites-available/default`
+        ```
+        server {
+            listen 80;
+    
+            server_name localhost;
+    
+            auth_basic "Restricted Access";
+            auth_basic_user_file /etc/nginx/htpasswd.users;
+    
+            location / {
+                proxy_pass http://localhost:5601;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;        
+            }
+        }
+        ```
+*  `sudo service nginx restart`
+* 	`wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -`
+* 	`echo 'deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main' | sudo tee /etc/apt/sources.list.d/elasticsearch.list`
+* 	`cd /root && wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.4.noarch.rpm`
+* 	`sudo apt-get update && sudo apt-get -y install elasticsearch=1.4.4`
+* 	`rm -f elasticsearch-1.4.4.noarch.rpm`
+* 	`cd /usr/share/elasticsearch/`
+* 	`/usr/share/elasticsearch/bin/plugin -install mobz/elasticsearch-head`
+* 	`/usr/share/elasticsearch/bin/plugin -install lukas-vlcek/bigdesk`
+* 	`/usr/share/elasticsearch/bin/plugin -i elasticsearch/marvel/latest`
+* 	`vi /etc/elasticsearch/elasticsearch.yml` --- add the following lines in the elasticsearch.yml
+
+        ```
+        cluster.name: elk-stack
+        node.name: "mps-kibana-01"
+        node.master: false
+        node.data: false
+        discovery.zen.ping.multicast.enabled: false
+        discovery.zen.ping.unicast.hosts: ["First-node-IPorName""second-node-IP0rName"]
+        ```
+*   `sudo update-rc.d elasticsearch defaults 95 10`    
+*   `sudo service logstash restart`
+*   `sudo service elasticsearch start`

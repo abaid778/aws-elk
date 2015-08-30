@@ -172,5 +172,34 @@ Search `[ v3_ca ] ` and add following line
         discovery.zen.ping.unicast.hosts: ["First-node-IPorName""second-node-IP0rName"]
         ```
 *   `sudo update-rc.d elasticsearch defaults 95 10`    
-*   `sudo service logstash restart`
 *   `sudo service elasticsearch start`
+
+### Logforwarded Installation
+
+* `echo 'deb http://packages.elasticsearch.org/logstashforwarder/debian stable main' | sudo tee /etc/apt/sources.list.d/logstashforwarder.list`
+* `wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -`
+* `sudo apt-get update && sudo apt-get install logstash-forwarder`
+* `sudo mkdir -p /etc/pki/tls/certs && cp /root/logstash-forwarder.crt /etc/pki/tls/certs/`
+* `sudo rm -rf /etc/logstash-forwarder.conf && `
+        ```
+        {
+                  "network": {
+                         "servers": [ "LOGSTASHIP:5000" ],
+                         "timeout": 15,
+                         "ssl ca": "/etc/pki/tls/certs/logstash-forwarder.crt"
+             },
+
+                  "files": [
+                         {
+                                "paths": [
+                                         "/var/log/apache2/access.log",
+                                         "/var/log/apache2/error.log"
+                                        ],
+                     "fields": { "type": "syslog" }
+                        }
+                        ]
+                }
+
+        ```
+*  `sudo service logstash-forwarder restart`
+

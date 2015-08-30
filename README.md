@@ -46,49 +46,47 @@ Search `[ v3_ca ] ` and add following line
 *   `cd /etc/pki/tls && sudo openssl req -config /etc/ssl/openssl.cnf -x509 -days 3650 -batch -nodes -newkey rsa:2048 -keyout private/logstash-forwarder.key -out certs/logstash-forwarder.crt`
 *   `sudo vi /etc/logstash/conf.d/01-lumberjack-input.conf`
 
-        ```
-          input {
-          lumberjack {
-            port => 5000
-            type => "logs"
-            ssl_certificate => "/etc/pki/tls/certs/logstash-forwarder.crt"
-            ssl_key => "/etc/pki/tls/private/logstash-forwarder.key"
-          }
+    ```
+        input {
+        lumberjack {
+        port => 5000
+        type => "logs"
+        ssl_certificate => "/etc/pki/tls/certs/logstash-forwarder.crt"
+        ssl_key => "/etc/pki/tls/private/logstash-forwarder.key"
         }
-        ```
+        }
+    ```
+
 * `sudo vi /etc/logstash/conf.d/10-syslog.conf`
- 
 
-        ```
+    ```
         filter {
-          if [type] == "syslog" {
-            grok {
-              match => { "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp}" }
-              add_field => [ "received_at", "%{@timestamp}" ]
-              add_field => [ "received_from", "%{host}" ]
-            }
-            syslog_pri { }
-            date {
-              match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
-            }
-          }
+        if [type] == "syslog" {
+        grok {
+        match => { "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp}" }
+        add_field => [ "received_at", "%{@timestamp}" ]
+        add_field => [ "received_from", "%{host}" ]
         }
-
-        ```
+        syslog_pri { }
+        date {
+        match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
+        }
+        }
+        }
+    ```
 * `sudo vi /etc/logstash/conf.d/30-lumberjack-output.conf`
 
-        ```
+    ```
         output
-         {
+        {
         stdout {
-            codec => rubydebug
-          }
-               elasticsearch {
-                             cluster => "elk-stack"
-               }
+        codec => rubydebug
         }
-
-        ```
+        elasticsearch {
+        cluster => "elk-stack"
+        }
+        }
+    ```
 
 *   `sudo add-apt-repository -y ppa:webupd8team/java` --- add Java PPA
 * 	`sudo apt-get update && sudo apt-get -y install oracle-java8-installer`
@@ -103,14 +101,15 @@ Search `[ v3_ca ] ` and add following line
 * 	`/usr/share/elasticsearch/bin/plugin -i elasticsearch/marvel/latest`
 * 	`vi /etc/elasticsearch/elasticsearch.yml` --- add the following lines in the elasticsearch.yml
 
-        ```
+    ```
         cluster.name: elk-stack
         node.name: "mps-logstash-01"
         node.master: false
         node.data: false
         discovery.zen.ping.multicast.enabled: false
         discovery.zen.ping.unicast.hosts: ["First-node-IPorName""second-node-IP0rName"]
-        ```
+    ```
+
 *   `sudo update-rc.d elasticsearch defaults 95 10`    
 *   `sudo service logstash restart`
 *   `sudo service elasticsearch start`
@@ -132,7 +131,7 @@ Search `[ v3_ca ] ` and add following line
 *   `sudo apt-get install nginx apache2-utils`
 *   `sudo htpasswd -c /etc/nginx/htpasswd.users kibanaadmin`
 *   `sudo vi /etc/nginx/sites-available/default`
-        ```
+    ```
         server {
             listen 80;
     
@@ -150,7 +149,8 @@ Search `[ v3_ca ] ` and add following line
                 proxy_cache_bypass $http_upgrade;        
             }
         }
-        ```
+    ```
+    
 *  `sudo service nginx restart`
 * 	`wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -`
 * 	`echo 'deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main' | sudo tee /etc/apt/sources.list.d/elasticsearch.list`
@@ -163,14 +163,15 @@ Search `[ v3_ca ] ` and add following line
 * 	`/usr/share/elasticsearch/bin/plugin -i elasticsearch/marvel/latest`
 * 	`vi /etc/elasticsearch/elasticsearch.yml` --- add the following lines in the elasticsearch.yml
 
-        ```
+    ```
         cluster.name: elk-stack
         node.name: "mps-kibana-01"
         node.master: false
         node.data: false
         discovery.zen.ping.multicast.enabled: false
         discovery.zen.ping.unicast.hosts: ["First-node-IPorName""second-node-IP0rName"]
-        ```
+    ```
+    
 *   `sudo update-rc.d elasticsearch defaults 95 10`    
 *   `sudo service elasticsearch start`
 
@@ -181,7 +182,7 @@ Search `[ v3_ca ] ` and add following line
 * `sudo apt-get update && sudo apt-get install logstash-forwarder`
 * `sudo mkdir -p /etc/pki/tls/certs && cp /root/logstash-forwarder.crt /etc/pki/tls/certs/`
 * `sudo rm -rf /etc/logstash-forwarder.conf && `
-        ```
+    ```
         {
                   "network": {
                          "servers": [ "LOGSTASHIP:5000" ],
@@ -200,6 +201,6 @@ Search `[ v3_ca ] ` and add following line
                         ]
                 }
 
-        ```
+    ```
 *  `sudo service logstash-forwarder restart`
 

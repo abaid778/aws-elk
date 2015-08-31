@@ -101,7 +101,7 @@ Search `[ v3_ca ] ` and add following line
         node.master: false
         node.data: false
         discovery.zen.ping.multicast.enabled: false
-        discovery.zen.ping.unicast.hosts: ["First-node-IPorName""second-node-IP0rName"]
+        discovery.zen.ping.unicast.hosts: ["First-node-IPorName","second-node-IP0rName"]
     ```
 
 *   `sudo update-rc.d elasticsearch defaults 95 10`    

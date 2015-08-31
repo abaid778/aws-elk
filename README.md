@@ -38,7 +38,7 @@
 * 	`echo 'deb http://packages.elasticsearch.org/logstash/1.5/debian stable main' | sudo tee /etc/apt/sources.list.d/logstash.list`
 * 	`sudo apt-get update && sudo apt-get install logstash`
 * 	`sudo mkdir -p /etc/pki/tls/certs`
-* 	`sudo mkdir /etc/pki/tls/private && sudo mkdir /etc/pki/tls/private`
+* 	`sudo mkdir -p /etc/pki/tls/private`
 * 	`sudo vi /etc/ssl/openssl.cnf` 
 Search `[ v3_ca ] ` and add following line
 *   `subjectAltName = IP: logstash_server_private_ip`

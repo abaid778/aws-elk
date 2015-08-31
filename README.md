@@ -87,14 +87,9 @@ Search `[ v3_ca ] ` and add following line
         }
     ```
 
-*   `sudo add-apt-repository -y ppa:webupd8team/java` --- add Java PPA
-* 	`sudo apt-get update && sudo apt-get -y install oracle-java8-installer`
 * 	`wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -`
 * 	`echo 'deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main' | sudo tee /etc/apt/sources.list.d/elasticsearch.list`
-* 	`cd /root && wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.4.noarch.rpm`
 * 	`sudo apt-get update && sudo apt-get -y install elasticsearch=1.4.4`
-* 	`rm -f elasticsearch-1.4.4.noarch.rpm`
-* 	`cd /usr/share/elasticsearch/`
 * 	`/usr/share/elasticsearch/bin/plugin -install mobz/elasticsearch-head`
 * 	`/usr/share/elasticsearch/bin/plugin -install lukas-vlcek/bigdesk`
 * 	`/usr/share/elasticsearch/bin/plugin -i elasticsearch/marvel/latest`

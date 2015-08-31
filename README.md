@@ -8,7 +8,6 @@
 * 	`sudo apt-get update && sudo apt-get -y install oracle-java8-installer`
 * 	`wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -`
 * 	`echo 'deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main' | sudo tee /etc/apt/sources.list.d/elasticsearch.list`
-* 	`cd /root && wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.4.noarch.rpm`
 * 	`sudo apt-get update && sudo apt-get -y install elasticsearch=1.4.4`
 * 	`rm -f elasticsearch-1.4.4.noarch.rpm`
 * 	`cd /usr/share/elasticsearch/`

@@ -76,15 +76,15 @@ Search `[ v3_ca ] ` and add following line
 * `sudo vi /etc/logstash/conf.d/30-lumberjack-output.conf`
 
     ```
-        output
-        {
-            stdout {
-            codec => rubydebug
-        }
-            elasticsearch {
-             cluster => "elk-stack"
-                 }
-        }
+   output {
+  stdout {
+    codec => rubydebug
+  }
+  elasticsearch {
+    cluster => "elasticsearch-cluster"
+  }
+}
+
     ```
 
 * 	`wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -`

@@ -148,10 +148,7 @@ Search `[ v3_ca ] ` and add following line
 *  `sudo service nginx restart`
 * 	`wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -`
 * 	`echo 'deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main' | sudo tee /etc/apt/sources.list.d/elasticsearch.list`
-* 	`cd /root && wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.4.noarch.rpm`
 * 	`sudo apt-get update && sudo apt-get -y install elasticsearch=1.4.4`
-* 	`rm -f elasticsearch-1.4.4.noarch.rpm`
-* 	`cd /usr/share/elasticsearch/`
 * 	`/usr/share/elasticsearch/bin/plugin -install mobz/elasticsearch-head`
 * 	`/usr/share/elasticsearch/bin/plugin -install lukas-vlcek/bigdesk`
 * 	`/usr/share/elasticsearch/bin/plugin -i elasticsearch/marvel/latest`
@@ -163,7 +160,7 @@ Search `[ v3_ca ] ` and add following line
         node.master: false
         node.data: false
         discovery.zen.ping.multicast.enabled: false
-        discovery.zen.ping.unicast.hosts: ["First-node-IPorName""second-node-IP0rName"]
+        discovery.zen.ping.unicast.hosts: ["First-node-IPorName","second-node-IP0rName"]
     ```
     
 *   `sudo update-rc.d elasticsearch defaults 95 10`    
